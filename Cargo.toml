@@ -1,0 +1,17 @@
+[package]
+name = "professor"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dotenv = "0.15.0"
+
+[dependencies.tokio]
+version = "1.43.0"
+features = [
+    "rt-multi-thread",
+    "macros",
+]
+
+[dependencies.serenity]
+version = "0.12.4"
