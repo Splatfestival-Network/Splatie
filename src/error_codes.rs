@@ -55,6 +55,9 @@ impl Default for ErrorInfo{
 static ERROR_CODE_REGEX: Lazy<Regex> =
     Lazy::new(|| Regex::new("\\d\\d\\d-\\d\\d\\d\\d").expect("invalid regex"));
 
+static CHEESEBURGER_REGEX: Lazy<Regex> =
+    Lazy::new(|| Regex::new("[Cc]heeseburger(s)?").expect("invalid regex"));
+
 pub struct ErrorCodeHandler;
 
 fn create_error_explain_message(str_code: &str, expanded: bool) -> Option<EditMessage>{
@@ -76,7 +79,7 @@ fn create_error_explain_message(str_code: &str, expanded: bool) -> Option<EditMe
             .field("System", category_info.system, true)
             .field("Module Description", category_info.description, true)
             .field("Name", error_info.name, false)
-            .field("Explanation", error_info.message, true)
+            .field("Explanation", format!("```{}```", error_info.message), true)
             .field("Description", error_info.long_description, true)
             .field("Solution", error_info.long_solution, true)
         ;
@@ -148,6 +151,10 @@ impl EventHandler for ErrorCodeHandler {
             msg.edit(&ctx.http, edited).await.ok();
 
             start_timed_explanation_collapse(msg, ctx.http.clone(), str_code);
+        }
+
+        if CHEESEBURGER_REGEX.is_match(&msg.content){
+            msg.reply(&ctx.http, "currently scratching the FUCK out of my bum bum idgaf").await.ok();
         }
     }
 

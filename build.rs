@@ -24,6 +24,8 @@ struct ErrorInfo{
 }
 
 fn main(){
+    println!("cargo:rerun-if-changed=./error-codes");
+
     let mut code = "pub fn get_error_code_and_category(category: u16, code: u16) -> (super::CategoryInfo, super::ErrorInfo) {\
                               let category_result = match category{\
                                 ".to_owned();
@@ -135,43 +137,50 @@ fn main(){
                 panic!("unable to parse error json");
             };
 
-            let name = name.replace("\"", "\\\"");
+            let name = name.replace("\"", "\\\"")
+                .replace("\\n", "\n");
 
             let Value::String(message) = &error["message"] else {
                 panic!("unable to parse error json");
             };
 
-            let message = message.replace("\"", "\\\"");
+            let message = message.replace("\"", "\\\"")
+                .replace("\\n", "\n");
 
             let Value::String(short_description) = &error["short_description"] else {
                 panic!("unable to parse error json");
             };
 
-            let short_description = short_description.replace("\"", "\\\"");
+            let short_description = short_description.replace("\"", "\\\"")
+                .replace("\\n", "\n");
 
             let Value::String(long_description) = &error["long_description"] else {
                 panic!("unable to parse error json");
             };
 
-            let long_description = long_description.replace("\"", "\\\"");
+            let long_description = long_description.replace("\"", "\\\"")
+                .replace("\\n", "\n");
 
             let Value::String(short_solution) = &error["short_solution"] else {
                 panic!("unable to parse error json");
             };
 
-            let short_solution = short_solution.replace("\"", "\\\"");
+            let short_solution = short_solution.replace("\"", "\\\"")
+                .replace("\\n", "\n");
 
             let Value::String(long_solution) = &error["long_solution"] else {
                 panic!("unable to parse error json");
             };
 
-            let long_solution = long_solution.replace("\"", "\\\"");
+            let long_solution = long_solution.replace("\"", "\\\"")
+                .replace("\\n", "\n");
 
             let Value::String(support_link) = &error["support_link"] else {
                 panic!("unable to parse error json");
             };
 
-            let support_link = support_link.replace("\"", "\\\"");
+            let support_link = support_link.replace("\"", "\\\"")
+                .replace("\\n", "\n");
 
             code.write_str(
                 &format!("\

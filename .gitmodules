@@ -1,3 +1,4 @@
 [submodule "error-codes"]
 	path = error-codes
 	url = https://github.com/AToska21/error-codes.git
+	branch = dev
