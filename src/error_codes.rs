@@ -65,7 +65,7 @@ fn create_error_explain_message(str_code: &str, expanded: bool) -> Option<EditMe
         return None;
     };
 
-    let Ok(error) = str_code[5..].parse() else {
+    let Ok(error) = str_code[4..].parse() else {
         return None;
     };
 

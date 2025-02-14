@@ -80,7 +80,7 @@ fn main(){
     code.write_str("\
         _ => super::CategoryInfo::default()\
     };\
-                            let error_result = match ((category as u32) << 16)  | code as u32{\
+                            let error_result = match (category, code){\
                                \
     ").expect("unable to write");
 
@@ -130,8 +130,6 @@ fn main(){
 
             let category_num: u32 = first_category.0.parse().expect("unable to parse category");
             let error_num: u32 = first_error.0.parse().expect("unable to parse error");
-
-            let search_val: u32 = category_num << 16 | error_num;
 
             let Value::String(name) = &error["name"] else {
                 panic!("unable to parse error json");
@@ -184,7 +182,7 @@ fn main(){
 
             code.write_str(
                 &format!("\
-            {} => super::ErrorInfo{{\
+            ({},{}) => super::ErrorInfo{{\
                 name: \"{}\",
                 message: \"{}\",
                 short_description: \"{}\",
@@ -193,7 +191,7 @@ fn main(){
                 long_solution: \"{}\",
                 support_link: \"{}\",
             }},\
-            ", search_val, name, message, short_description, long_description, short_solution, long_solution, support_link)
+            ", category_num, error_num, name, message, short_description, long_description, short_solution, long_solution, support_link)
             ).expect("unable to write");
         }
     }
