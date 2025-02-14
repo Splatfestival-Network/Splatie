@@ -58,6 +58,9 @@ static ERROR_CODE_REGEX: Lazy<Regex> =
 static CHEESEBURGER_REGEX: Lazy<Regex> =
     Lazy::new(|| Regex::new("[Cc]heeseburger(s)?").expect("invalid regex"));
 
+static AY_REGEX: Lazy<Regex> =
+    Lazy::new(|| Regex::new("[Aa][Yy]*").expect("invalid regex"));
+
 pub struct ErrorCodeHandler;
 
 fn create_error_explain_message(str_code: &str, expanded: bool) -> Option<EditMessage>{
@@ -155,6 +158,40 @@ impl EventHandler for ErrorCodeHandler {
 
         if CHEESEBURGER_REGEX.is_match(&msg.content){
             msg.reply(&ctx.http, "currently scratching the FUCK out of my bum bum idgaf").await.ok();
+        }
+
+        if AY_REGEX.is_match(&msg.content){
+            let mut output = "".to_owned();
+            let mut lastpos = 0;
+            for ay in AY_REGEX.find_iter(&msg.content){
+                output += &msg.content[lastpos..ay.start()];
+
+                let str = ay.as_str();
+
+                let mut chars = str.chars();
+
+                let Some(first_char) = chars.next() else{
+                    return
+                };
+
+                if first_char.is_lowercase(){
+                    output.push_str("lma")
+                } else {
+                    output.push_str("LMA")
+                }
+
+                for char in chars{
+                    if char.is_lowercase(){
+                        output.push('o')
+                    } else {
+                        output.push('O')
+                    }
+                }
+
+                lastpos = ay.end();
+            }
+
+            msg.reply(&ctx.http, output).await.ok();
         }
     }
 
