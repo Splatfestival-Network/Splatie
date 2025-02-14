@@ -30,7 +30,11 @@ features = [
 
 [dependencies.serenity]
 version = "0.12.4"
-features = ["interactions_endpoint"]
+features = [
+    "interactions_endpoint",
+    "utils",
+    "collector"
+]
 
 [build-dependencies]
 serde = { version = "1.0.217", features = ["derive"] }

@@ -55,11 +55,8 @@ impl Default for ErrorInfo{
 static ERROR_CODE_REGEX: Lazy<Regex> =
     Lazy::new(|| Regex::new("\\d\\d\\d-\\d\\d\\d\\d").expect("invalid regex"));
 
-static CHEESEBURGER_REGEX: Lazy<Regex> =
-    Lazy::new(|| Regex::new("[Cc]heeseburger(s)?").expect("invalid regex"));
 
-static AY_REGEX: Lazy<Regex> =
-    Lazy::new(|| Regex::new("(^|\\s)[Aa][Yy]+($|\\s)").expect("invalid regex"));
+
 
 pub struct ErrorCodeHandler;
 
@@ -154,58 +151,6 @@ impl EventHandler for ErrorCodeHandler {
             msg.edit(&ctx.http, edited).await.ok();
 
             start_timed_explanation_collapse(msg, ctx.http.clone(), str_code);
-        }
-
-        if CHEESEBURGER_REGEX.is_match(&msg.content){
-            msg.reply(&ctx.http, "currently scratching the FUCK out of my bum bum idgaf").await.ok();
-        }
-
-        if AY_REGEX.is_match(&msg.content){
-            let mut output = "".to_owned();
-            let mut lastpos = 0;
-            for ay in AY_REGEX.find_iter(&msg.content){
-                output += &msg.content[lastpos..ay.start()];
-
-                lastpos = ay.end();
-                
-                let mut str = ay.as_str();
-
-                if str.starts_with(' '){
-                    str = &str[1..];
-                    output.push(' ');
-                }
-
-                let mut chars = str.chars();
-
-                let Some(first_char) = chars.next() else{
-                    return
-                };
-
-                if first_char.is_lowercase(){
-                    output.push_str("lma")
-                } else {
-                    output.push_str("LMA")
-                }
-
-                for char in chars{
-                    if char == ' '{
-                        output.push(' ');
-                        break;
-                    }
-
-                    if char.is_lowercase(){
-                        output.push('o');
-                    } else {
-                        output.push('O');
-                    }
-
-
-                }
-            }
-
-            output += &msg.content[lastpos..];
-
-            msg.reply(&ctx.http, output).await.ok();
         }
     }
 

@@ -1,4 +1,7 @@
 mod error_codes;
+mod cheeseburger;
+mod ayy;
+mod miiverse_mod_application;
 
 use std::env;
 use once_cell::sync::Lazy;
@@ -21,6 +24,9 @@ async fn main() {
 
     let mut client = Client::builder(&token, intents)
         .event_handler(error_codes::ErrorCodeHandler)
+        .event_handler(ayy::AyyHandler)
+        .event_handler(cheeseburger::CheeseburgerHandler)
+        .event_handler(miiverse_mod_application::MiiverseModApplicationHandler::default())
         .await.expect("unable to create client");
 
     client.start().await.expect("error running bot");
