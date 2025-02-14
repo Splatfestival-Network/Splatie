@@ -59,7 +59,7 @@ static CHEESEBURGER_REGEX: Lazy<Regex> =
     Lazy::new(|| Regex::new("[Cc]heeseburger(s)?").expect("invalid regex"));
 
 static AY_REGEX: Lazy<Regex> =
-    Lazy::new(|| Regex::new("[Aa][Yy]*").expect("invalid regex"));
+    Lazy::new(|| Regex::new("(^|\\s)[Aa][Yy]+($|\\s)").expect("invalid regex"));
 
 pub struct ErrorCodeHandler;
 
@@ -166,7 +166,14 @@ impl EventHandler for ErrorCodeHandler {
             for ay in AY_REGEX.find_iter(&msg.content){
                 output += &msg.content[lastpos..ay.start()];
 
-                let str = ay.as_str();
+                lastpos = ay.end();
+                
+                let mut str = ay.as_str();
+
+                if str.starts_with(' '){
+                    str = &str[1..];
+                    output.push(' ');
+                }
 
                 let mut chars = str.chars();
 
@@ -181,15 +188,22 @@ impl EventHandler for ErrorCodeHandler {
                 }
 
                 for char in chars{
-                    if char.is_lowercase(){
-                        output.push('o')
-                    } else {
-                        output.push('O')
+                    if char == ' '{
+                        output.push(' ');
+                        break;
                     }
-                }
 
-                lastpos = ay.end();
+                    if char.is_lowercase(){
+                        output.push('o');
+                    } else {
+                        output.push('O');
+                    }
+
+
+                }
             }
+
+            output += &msg.content[lastpos..];
 
             msg.reply(&ctx.http, output).await.ok();
         }

@@ -9,7 +9,6 @@ overflow-checks = false
 debug = "none"
 debug-assertions = false
 strip = true
-lto = "fat"
 panic = "abort"
 
 
