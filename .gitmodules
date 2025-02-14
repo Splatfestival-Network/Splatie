@@ -1,4 +1,4 @@
 [submodule "error-codes"]
 	path = error-codes
-	url = https://github.com/AToska21/error-codes.git
+	url = https://git.perditum.com/Perditum/error-codes.git
 	branch = dev
