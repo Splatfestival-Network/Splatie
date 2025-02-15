@@ -3,6 +3,7 @@ mod cheeseburger;
 mod ayy;
 mod miiverse_mod_application;
 mod too_fat;
+mod emergency_report;
 
 use std::env;
 use once_cell::sync::Lazy;
@@ -28,6 +29,7 @@ async fn main() {
         .event_handler(ayy::AyyHandler)
         .event_handler(cheeseburger::CheeseburgerHandler)
         .event_handler(too_fat::TooFatHandler)
+        .event_handler(emergency_report::EmergencyReportHandler::default())
         //.event_handler(miiverse_mod_application::MiiverseModApplicationHandler::default())
         .await.expect("unable to create client");
 

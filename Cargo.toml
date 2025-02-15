@@ -10,7 +10,6 @@ debug = "none"
 debug-assertions = false
 strip = true
 panic = "abort"
-lto="fat"
 
 
 
