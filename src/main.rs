@@ -30,7 +30,7 @@ async fn main() {
         .event_handler(cheeseburger::CheeseburgerHandler)
         .event_handler(too_fat::TooFatHandler)
         .event_handler(emergency_report::EmergencyReportHandler::default())
-        //.event_handler(miiverse_mod_application::MiiverseModApplicationHandler::default())
+        .event_handler(miiverse_mod_application::MiiverseModApplicationHandler::default())
         .await.expect("unable to create client");
 
     client.start().await.expect("error running bot");

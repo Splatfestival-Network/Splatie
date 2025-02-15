@@ -1,6 +1,6 @@
 
 use crate::cheeseburger::CheeseburgerHandler;
-use serenity::all::{ActivityData, ActivityType, Command, CommandId, Context, CreateCommand, CreateInputText, CreateQuickModal, EventHandler, Guild, GuildId, InputTextStyle, Interaction, Message, Ready};
+use serenity::all::{ActivityData, ActivityType, ChannelId, Colour, Command, CommandId, Context, CreateCommand, CreateEmbed, CreateEmbedAuthor, CreateInputText, CreateInteractionResponse, CreateInteractionResponseMessage, CreateMessage, CreateQuickModal, EventHandler, Guild, GuildId, InputTextStyle, Interaction, Message, Ready, Timestamp};
 use serenity::async_trait;
 use tokio::sync::OnceCell;
 
@@ -33,14 +33,10 @@ impl EventHandler for MiiverseModApplicationHandler {
             return;
         }
 
-        let main_field = CreateInputText::new(
-            InputTextStyle::Paragraph,
-            "Text",
-            "MAIN_CONTENT"
-        );
-
         let modal = CreateQuickModal::new("Miiverse Moderator Application Form")
-            .field(main_field);
+            .short_field("Whats your timezone?")
+            .short_field("How long are you usually availible every day?")
+            .paragraph_field("Why should we pick you?");
 
         let response = match cmd.quick_modal(&ctx, modal).await{
             Ok(v) => v,
@@ -50,6 +46,31 @@ impl EventHandler for MiiverseModApplicationHandler {
         let Some(response) = response else {
             return
         };
+
+        response.interaction.create_response(&ctx.http, CreateInteractionResponse::Message(
+            CreateInteractionResponseMessage::new()
+                .ephemeral(true)
+                .content("application has been sent")
+        )).await.ok();
+
+
+        let emergency_channel = ChannelId::new(1324479126991802528);
+
+        let mut author = CreateEmbedAuthor::from(response.interaction.user);
+
+        let embed = CreateEmbed::new()
+            .title("New Miiverse application")
+            .field("Whats your timezone?", &response.inputs[0], false)
+            .field("How long are you usually availible every day?", &response.inputs[1], false)
+            .field("Why should we pick you?", &response.inputs[2], false)
+            .timestamp(Timestamp::now())
+            .author(author)
+            .color(Colour::DARK_GREEN);
+
+        let message = CreateMessage::new()
+            .add_embed(embed);
+
+        emergency_channel.send_message(&ctx.http, message).await.ok();
 
 
     }
