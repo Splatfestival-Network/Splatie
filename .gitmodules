@@ -1,4 +1,4 @@
 [submodule "error-codes"]
 	path = error-codes
-	url = https://git.perditum.com/Perditum/error-codes.git
+	url = https://github.com/Splatfestival-Network/ErrorCodes
 	branch = dev
