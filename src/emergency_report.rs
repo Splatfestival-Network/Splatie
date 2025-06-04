@@ -58,7 +58,7 @@ impl EventHandler for EmergencyReportHandler {
 
         let text = &response.inputs[0];
 
-        let emergency_channel = ChannelId::new(1286724627413864562);
+        let emergency_channel = ChannelId::new(1379768148420591666);
 
         let mut author = CreateEmbedAuthor::from(response.interaction.user);
 
